@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TaskListComponent } from './task-list/task-list.component';
 import { AddTaskComponent } from './add-task/add-task.component';
 import { UserListComponent } from './user-list/user-list.component';
+import { TaskService } from './task.service';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,7 @@ import { UserListComponent } from './user-list/user-list.component';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [TaskService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

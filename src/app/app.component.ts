@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Task } from './models/task.model';
 import { TaskService } from './task.service';
 
 @Component({
@@ -7,46 +6,48 @@ import { TaskService } from './task.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-
 export class AppComponent implements OnInit {
-  tasks: Task[] = [];
-  newTask: Task = { title: '', description: '', completed: false };
-  updatedTask: Task = { title: '', description: '', completed: false };
-  newTaskTitle: string = '';
-  newTaskDescription: string = '';
-  updatedTaskId: number = 0;
-  updatedTaskTitle: string = '';
-  updatedTaskDescription: string = '';
-  constructor(private taskService: TaskService) {}
+  tasks: any[] = [];
+  newTask : string = "";
 
-  ngOnInit(): void {
-    this.taskService.getTasks().subscribe(tasks => {
-      this.tasks = tasks;
-    });
+  constructor(private taskService: TaskService) { }
+
+  ngOnInit() {
+    this.getTasks();
   }
 
-  addTask(newTask: Task): void {
-    this.taskService.addTask(newTask).subscribe(task => {
-      this.tasks.push(task);
-      this.newTask = { title: '', description: '', completed: false };
-    });
+  getTasks() {
+    this.taskService.getAllTasks()
+      .subscribe(tasks => {
+        this.tasks = tasks;
+      });
   }
 
-  updateTask(updatedTask: Task): void {
-    this.taskService.updateTask(updatedTask).subscribe(task => {
-      const index = this.tasks.findIndex(t => t.id === task.id);
-      if (index !== -1) {
-        this.tasks[index] = task;
+  addTask() {
+    const task = { title: this.newTask };
+    this.taskService.addTask(task)
+      .subscribe(() => {
+        this.newTask = '';
+        this.getTasks();
+      });
+  }
+
+  updateTask(task: any) {
+    this.taskService.updateTask(task)
+      .subscribe(() => {
+        this.getTasks();
+      });
+  }
+
+  deleteTask(taskId: number) {
+    this.taskService.deleteTask(taskId).subscribe({
+      next: () => {
+        this.tasks = this.tasks.filter(task => task.id !== taskId);
+      },
+      error: error => {
+        console.error('Error deleting task:', error);
       }
     });
   }
-
-  deleteTask(taskId: number | undefined): void {
-    if (taskId) {
-      const taskIdString = taskId.toString();
-      this.taskService.deleteTask(taskIdString).subscribe(() => {
-        this.tasks = this.tasks.filter(t => t.id !== taskId);
-      });
-    }
-  }
 }
+

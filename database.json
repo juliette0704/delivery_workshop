@@ -1,7 +1,16 @@
 {
-  "users": [
-    { "id": 1, "name": "John" },
-    { "id": 2, "name": "Jane" },
-    { "id": 3, "name": "Bob" }
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Faire les courses",
+      "description": "Acheter des légumes, du lait, du pain",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "title": "Nettoyer la maison",
+      "description": "Passer l'aspirateur, laver les vitres",
+      "completed": true
+    }
   ]
 }
